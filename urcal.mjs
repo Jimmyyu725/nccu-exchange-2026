@@ -1,0 +1,10 @@
+import { newTab, closeTab, connect, evalJS, sleep } from './cdp.mjs';
+const tab=await newTab('about:blank');
+const cdp=connect(tab.webSocketDebuggerUrl);await cdp.ready;
+await cdp.send('Page.enable');await cdp.send('Runtime.enable');
+const L=new Promise(r=>{cdp.on(m=>{if(m.method==='Page.loadEventFired')r();});});
+await cdp.send('Page.navigate',{url:'https://registrar.richmond.edu/planning/calendar/future.html'});
+await Promise.race([L,sleep(12000)]);await sleep(1500);
+const links=await evalJS(cdp,`[...document.querySelectorAll('a')].filter(a=>/2027|spring|pdf/i.test(a.textContent+a.href)).map(a=>a.textContent.trim()+' => '+a.href).slice(0,15)`);
+console.log(links.join('\n'));
+await closeTab(tab.id);cdp.close();process.exit(0);

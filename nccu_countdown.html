@@ -1,0 +1,457 @@
+<title>NCCU 行前倒數 · Fall 2026</title>
+<style>
+:root{
+  --paper:#F1F3F6; --card:#FFFFFF; --ink:#191C24; --muted:#646C7C; --line:#DDE1E8;
+  --accent:#8C1D33; --accent-soft:#F3E4E7;
+  --critical:#C8412B; --critical-bg:#FBE8E3;
+  --soon:#96690A; --soon-bg:#FAF0DC;
+  --done:#26705A; --done-bg:#E2F0EA;
+  --info:#3A5A8C; --info-bg:#E6ECF6;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#13151B; --card:#1C1F27; --ink:#E9EBF1; --muted:#949CAC; --line:#2C313C;
+    --accent:#E0687F; --accent-soft:#38222A;
+    --critical:#FF7A5C; --critical-bg:#3A2018;
+    --soon:#E5AC42; --soon-bg:#332714;
+    --done:#5CC79B; --done-bg:#14312A;
+    --info:#8FB0E0; --info-bg:#1A2436;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#13151B; --card:#1C1F27; --ink:#E9EBF1; --muted:#949CAC; --line:#2C313C;
+  --accent:#E0687F; --accent-soft:#38222A;
+  --critical:#FF7A5C; --critical-bg:#3A2018;
+  --soon:#E5AC42; --soon-bg:#332714;
+  --done:#5CC79B; --done-bg:#14312A;
+  --info:#8FB0E0; --info-bg:#1A2436;
+}
+:root[data-theme="light"]{
+  --paper:#F1F3F6; --card:#FFFFFF; --ink:#191C24; --muted:#646C7C; --line:#DDE1E8;
+  --accent:#8C1D33; --accent-soft:#F3E4E7;
+  --critical:#C8412B; --critical-bg:#FBE8E3;
+  --soon:#96690A; --soon-bg:#FAF0DC;
+  --done:#26705A; --done-bg:#E2F0EA;
+  --info:#3A5A8C; --info-bg:#E6ECF6;
+}
+*{box-sizing:border-box}
+body{margin:0; background:var(--paper); color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI","PingFang TC","Noto Sans TC",sans-serif;
+  line-height:1.55; -webkit-font-smoothing:antialiased;}
+.wrap{max-width:940px; margin:0 auto; padding:clamp(22px,4vw,48px) clamp(16px,4vw,36px) 80px;}
+.serif{font-family:Georgia,"Songti TC","Noto Serif TC",serif;}
+
+header{display:flex; flex-direction:column; gap:6px;}
+.kicker{font-size:.7rem; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); font-weight:700;}
+h1{font-family:Georgia,"Songti TC","Noto Serif TC",serif; font-weight:600; margin:0;
+   font-size:clamp(1.7rem,4.2vw,2.4rem); line-height:1.15; text-wrap:balance;}
+.sub{color:var(--muted); font-size:.97rem; max-width:62ch; margin:0;}
+.hr{height:2px; border:0; background:linear-gradient(90deg,var(--accent),transparent); margin:20px 0 0;}
+
+.strip{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-top:26px;}
+.stat{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px 16px;
+      display:flex; flex-direction:column; gap:2px;}
+.stat .lab{font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:600;}
+.stat .big{font-family:Georgia,"Songti TC",serif; font-size:1.7rem; line-height:1.1; font-variant-numeric:tabular-nums;}
+.stat .note{font-size:.78rem; color:var(--muted);}
+.stat.is-critical{border-color:var(--critical);}
+.stat.is-critical .big{color:var(--critical);}
+
+.acct{margin-top:14px; background:var(--accent-soft); border:1px solid var(--line);
+      border-radius:10px; padding:14px 16px; display:flex; flex-wrap:wrap; gap:8px 30px; align-items:baseline;}
+.acct .lab{font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:600; display:block;}
+.acct .val{font-size:1.02rem; font-weight:650; font-variant-numeric:tabular-nums;}
+.acct .hint{font-size:.78rem; color:var(--muted); flex-basis:100%;}
+
+section{margin-top:40px;}
+h2{font-family:Georgia,"Songti TC","Noto Serif TC",serif; font-size:1.25rem; font-weight:600; margin:0 0 4px;}
+.lead{color:var(--muted); font-size:.9rem; margin:0 0 16px; max-width:68ch;}
+
+.rail{display:flex; flex-direction:column; gap:10px;}
+.item{display:grid; grid-template-columns:90px 4px 1fr; gap:0 14px;
+      background:var(--card); border:1px solid var(--line); border-radius:10px; overflow:hidden;}
+.when{padding:14px 0 14px 14px; display:flex; flex-direction:column; align-items:flex-start; gap:1px;}
+.when .d{font-family:Georgia,"Songti TC",serif; font-size:1.08rem; font-variant-numeric:tabular-nums; line-height:1.15;}
+.when .left{font-size:.7rem; color:var(--muted); font-variant-numeric:tabular-nums; white-space:nowrap;}
+.stripe{background:var(--line);}
+.item.sev-critical .stripe{background:var(--critical);}
+.item.sev-soon .stripe{background:var(--soon);}
+.item.sev-info .stripe{background:var(--info);}
+.item.sev-done .stripe{background:var(--done);}
+.body{padding:14px 16px 14px 0; display:flex; flex-direction:column; gap:5px; min-width:0;}
+.title{font-weight:650; font-size:1rem; display:flex; flex-wrap:wrap; align-items:center; gap:8px;}
+.desc{font-size:.88rem; color:var(--muted); margin:0;}
+.desc strong{color:var(--ink); font-weight:600;}
+.todo{margin:4px 0 0; padding-left:17px; font-size:.86rem; display:flex; flex-direction:column; gap:3px;}
+.todo li{color:var(--muted);}
+.todo li strong{color:var(--ink); font-weight:600;}
+
+.pill{font-size:.67rem; font-weight:700; letter-spacing:.04em; padding:2px 8px; border-radius:20px; white-space:nowrap;}
+.p-critical{background:var(--critical-bg); color:var(--critical);}
+.p-soon{background:var(--soon-bg); color:var(--soon);}
+.p-info{background:var(--info-bg); color:var(--info);}
+.p-done{background:var(--done-bg); color:var(--done);}
+
+.tw{overflow-x:auto; border:1px solid var(--line); border-radius:10px; background:var(--card);}
+table{border-collapse:collapse; width:100%; min-width:520px; font-size:.88rem;}
+th{background:var(--paper); text-align:left; font-size:.68rem; letter-spacing:.06em; text-transform:uppercase;
+   color:var(--muted); font-weight:700; padding:10px 14px; border-bottom:1px solid var(--line);}
+td{padding:11px 14px; border-top:1px solid var(--line); vertical-align:top;}
+td.t{white-space:nowrap; font-variant-numeric:tabular-nums; color:var(--muted); font-size:.85rem;}
+td.c{font-weight:600;}
+tr.flag td{background:var(--soon-bg);}
+
+footer{margin-top:44px; padding-top:18px; border-top:1px solid var(--line); font-size:.82rem; color:var(--muted);}
+footer p{margin:0 0 7px;}
+code{background:var(--paper); border:1px solid var(--line); padding:1px 6px; border-radius:5px; font-size:.86em;}
+a{color:var(--accent);}
+a:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:3px;}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="kicker">National Chengchi University · 115-1</div>
+    <h1 class="serif">行前倒數</h1>
+    <p class="sub">2026 秋 NCCU 交換 — 從今天（<span id="today">…</span>）到開課的全部截止日。日期來自 OIC 四封資訊包（7/27）、Bell 選課須知（8/2），以及 <b>7/28 說明會錄影的完整逐字稿</b>（那裡面的選課四階段是郵件裡沒有的）。</p>
+    <hr class="hr">
+  </header>
+
+  <div class="strip">
+    <div class="stat" data-d="2026-08-11">
+      <span class="lab">出發</span>
+      <span class="big">6 天</span>
+      <span class="note">8/11 BR55 → 8/12 抵台</span>
+    </div>
+    <div class="stat is-critical" data-d="2026-08-31">
+      <span class="lab">最關鍵選課</span>
+      <span class="big">29 天</span>
+      <span class="note">8/31–9/2 Phase 2</span>
+    </div>
+    <div class="stat" data-d="2026-09-07">
+      <span class="lab">開課</span>
+      <span class="big">36 天</span>
+      <span class="note">9/7 第一週務必全勤</span>
+    </div>
+    <div class="stat">
+      <span class="lab">學期結束</span>
+      <span class="big">12/24</span>
+      <span class="note">考完即可離台</span>
+    </div>
+  </div>
+
+  <div class="acct">
+    <div><span class="lab">NCCU 學號</span><span class="val">115300018</span></div>
+    <div><span class="lab">預設密碼</span><span class="val">nccu0725</span></div>
+    <div><span class="lab">系統開放</span><span class="val">8 / 7</span></div>
+    <span class="hint">iNCCU：i.nccu.edu.tw ｜ 校內信箱：nccu.edu.tw/indexs.html ｜ 住宿：Off-campus ｜ Intensive Mandarin：未報名</span>
+  </div>
+
+  <section>
+    <h2 class="serif">主時間線</h2>
+    <p class="lead">紅條＝有處罰或不可補救，黃條＝需提前準備，藍條＝資訊類，綠條＝已確認無需動作。</p>
+
+    <div class="rail">
+
+      <div class="item sev-done" data-d="2026-08-03">
+        <div class="when"><span class="d">8/03</span><span class="left">1 天</span></div>
+        <div class="stripe"></div>
+        <div class="body">
+          <div class="title">中文課申請截止<span class="pill p-done">可跳過</span></div>
+          <p class="desc">你的 Intensive Mandarin 是 <strong>Not registered</strong>，符合 Academic-only 模組。若想修其他中文課，須在今天前向 CLC 線上申請。</p>
+        </div>
+      </div>
+
+      <div class="item sev-info" data-d="2026-08-07">
+        <div class="when"><span class="d">8/07</span><span class="left">5 天</span></div>
+        <div class="stripe"></div>
+        <div class="body">
+          <div class="title">iNCCU ＋ 校內信箱開放</div>
+          <p class="desc">用學號 115300018 ＋ nccu0725 登入。信箱可設<strong>自動轉寄</strong>。⚠️ 選課系統<strong>不是</strong>這天開，要等 8/25。</p>
+        </div>
+      </div>
+
+      <div class="item sev-done" data-d="2026-08-12">
+        <div class="when"><span class="d">8/12</span><span class="left">10 天</span></div>
+        <div class="stripe"></div>
+        <div class="body">
+          <div class="title">住宿變更截止<span class="pill p-done">無需動作</span></div>
+          <p class="desc">OIC 記錄為 <strong>Off-campus</strong>，與你的計畫一致。</p>
+        </div>
+      </div>
+
+      <div class="item sev-done" data-d="2026-08-13">
+        <div class="when"><span class="d">8/13</span><span class="left">11 天</span></div>
+        <div class="stripe"></div>
+        <div class="body">
+          <div class="title">Arrival Survey 截止<span class="pill p-done">✓ 已送出</span></div>
+          <p class="desc">已於 <strong>8/5</strong> 完成送出，比截止早 8 天。連帶生效的兩件事：<strong>9/3 Orientation 已報名</strong>、<strong>9/5 校內體檢已登記</strong>（胸部 X 光在那天拍，不必在美國先拍）。</p>
+          <ul class="todo">
+            <li>學生證與學生資料包的前置條件已解除</li>
+            <li>OIC 若對上傳的 MMR 或保險證明有疑問，會直接回信 — 留意 <strong>校內信箱與 Gmail</strong></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="item sev-info" data-d="2026-08-20">
+        <div class="when"><span class="d">8/15–25</span><span class="left"></span></div>
+        <div class="stripe"></div>
+        <div class="body">
+          <div class="title">Buddy 會來信<span class="pill p-info">已申請</span></div>
+          <p class="desc">配對的本地 buddy 會在<strong>選課開始前</strong>用 email 聯絡你，寄到<strong>個人信箱</strong>（學生用私人帳號寄，<strong>常被丟進垃圾郵件</strong>，記得翻）。</p>
+          <ul class="todo">
+            <li>他們的職責正是幫你搞 <strong>iNCCU 系統與選課</strong> — 對著 8/31 Phase 2 那關剛好</li>
+            <li>⏰ <strong>8/20 還沒收到就寫信問 Yulin</strong>（ykuo088@g.nccu.edu.tw）— 那時距 Phase 1 只剩 5 天</li>
+            <li>buddy 是志願者學生，客氣點、別當客服</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="item sev-soon" data-d="2026-08-25">
+        <div class="when"><span class="d">8/25–26</span><span class="left">23 天</span></div>
+        <div class="stripe"></div>
+        <div class="body">
+          <div class="title">選課 Phase 1<span class="pill p-soon">你幾乎用不上</span></div>
+          <p class="desc"><strong>8/25 09:00 → 8/26 17:00（台灣時間）</strong>。主要給本地生選必修。</p>
+          <ul class="todo">
+            <li>⚠️ <strong>通識課與體育課這階段完全不開放</strong> — 你的幸福學、種族宗教都是通識，<strong>這輪根本選不了</strong></li>
+            <li>Yulin 原話：「if you miss out on phase one, totally fine」</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="item sev-critical" data-d="2026-08-31">
+        <div class="when"><span class="d">8/31–9/2</span><span class="left">29 天</span></div>
+        <div class="stripe"></div>
+        <div class="body">
+          <div class="title">選課 Phase 2<span class="pill p-critical">全學期最關鍵</span></div>
+          <p class="desc"><strong>8/31 09:00 → 9/2 17:00（台灣時間）</strong>。OIC 明講這是<strong>最重要的一關</strong>：<strong>通識課這輪才開放</strong>，除體育外所有課全面開放。<strong>不是先搶先贏</strong> — 系統統一收單後按身分優先序分配（本系生優先），所以不用掐點，但<strong>絕不能錯過</strong>。你的 5 門課要在這輪一次押上。</p>
+          <ul class="todo">
+            <li>同期領 <strong>學生資料包</strong>（學生證＋繳費單＋校園地圖）— 地點 <strong>行政大樓 8F OIC 辦公室</strong>，每天只有兩個時段：<strong>11:00 或 16:00</strong></li>
+            <li>每個時段附 <strong>30–60 分鐘說明會</strong>，<strong>可不聽</strong> — 拿了包就能走（但資料要自己看完）</li>
+            <li>💡 <strong>趕不上這三天？9/3 Orientation 報到時也能領</strong></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="item sev-info" data-d="2026-09-02">
+        <div class="when"><span class="d">9/02 · 9/04</span><span class="left">30 · 32 天</span></div>
+        <div class="stripe"></div>
+        <div class="body">
+          <div class="title">OIC 文化小旅行 ×2<span class="pill p-info">自由參加</span></div>
+          <p class="desc">開學前兩趟走讀行程，帶交換生用步行＋大眾運輸認識台北。目的地：<strong>大稻埕</strong>＋另一站待公布。<strong>行程與報名方式 8 月中另發郵件</strong>。</p>
+        </div>
+      </div>
+
+      <div class="item sev-info" data-d="2026-09-03">
+        <div class="when"><span class="d">9/03</span><span class="left">32 天</span></div>
+        <div class="stripe"></div>
+        <div class="body">
+          <div class="title">OIC Orientation Day<span class="pill p-info">必到</span><span class="pill p-critical">要先報名</span></div>
+          <p class="desc"><strong>12:30–17:15 · 法學院 4F 王文杰講堂</strong>（不是 OIC 那棟行政大樓）。<strong>必須在 8/13 的 Arrival Survey 裡報名</strong>才算數。也可在這天報到時順便領學生資料包。</p>
+          <ul class="todo">
+            <li>消防演習<strong>只有住校內宿舍／iHouse 的人強制參加</strong> — 你住校外，<strong>不適用</strong></li>
+            <li>⚠️ 學校行事曆上那些 orientation 日期是給本地學位生的，<strong>與交換生無關，直接忽略</strong></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="item sev-soon" data-d="2026-09-05">
+        <div class="when"><span class="d">9/05</span><span class="left">34 天</span></div>
+        <div class="stripe"></div>
+        <div class="body">
+          <div class="title">選課結果公布 ＋ 校內體檢</div>
+          <p class="desc">Phase 1、2 的<strong>選課結果這天才通知</strong>（在那之前不知道有沒有選上）。同日<strong>集體體檢 16:00–18:00，最晚 17:30 報到</strong> — 你的胸部 X 光在這裡拍。</p>
+        </div>
+      </div>
+
+      <div class="item sev-critical" data-d="2026-09-07">
+        <div class="when"><span class="d">9/07</span><span class="left">36 天</span></div>
+        <div class="stripe"></div>
+        <div class="body">
+          <div class="title">正式開課</div>
+          <p class="desc">第一週<strong>每堂都要出席</strong>，教授看重。</p>
+        </div>
+      </div>
+
+      <div class="item sev-soon" data-d="2026-09-07">
+        <div class="when"><span class="d">9/07–14</span><span class="left">第 1 週</span></div>
+        <div class="stripe"></div>
+        <div class="body">
+          <div class="title">選課 Phase 3 — 線上加退選<span class="pill p-soon">先搶先贏</span></div>
+          <p class="desc"><strong>9/7 09:00 → 9/14 17:00</strong>。與 Phase 2 不同，這階段<strong>是 first-come-first-serve</strong>，有人退你就能補進。</p>
+          <ul class="todo">
+            <li>系統<strong>每天 17:00–19:00 關閉兩小時</strong>更新遞補，這時段別白等</li>
+            <li>⚠️ <strong>不想要的課要主動從候補名單刪掉</strong> — 否則系統會一直自動幫你重新申請</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="item sev-critical" data-d="2026-09-11">
+        <div class="when"><span class="d">9/11</span><span class="left">40 天</span></div>
+        <div class="stripe"></div>
+        <div class="body">
+          <div class="title">繳費截止<span class="pill p-critical">有金額</span></div>
+          <p class="desc">交換生<strong>免註冊費</strong>，但團體保險費必繳：</p>
+          <ul class="todo">
+            <li><strong>NCCU 團體保險費 約 NT$250 — 每位學生強制</strong>（宿舍費你不適用，校外租房）</li>
+            <li>繳費單在 <strong>8/31–9/2 領的學生資料包</strong> 裡（同包還有學生證、<strong>Form R-M 加簽表</strong>、校園地圖）</li>
+            <li>地點：<strong>行政大樓 5 樓 出納組</strong>，建議付現</li>
+            <li>💡 學生證同時是 <strong>悠遊卡</strong>，可直接搭捷運公車</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="item sev-soon" data-d="2026-09-15">
+        <div class="when"><span class="d">9/15–21</span><span class="left">第 2 週</span></div>
+        <div class="stripe"></div>
+        <div class="body">
+          <div class="title">選課 Phase 4 — 人工加簽<span class="pill p-soon">你的組織行為在這關</span></div>
+          <p class="desc"><strong>9/15 09:00 → 9/21 上午 11:59 截止</strong>（是中午前，不是午夜）。線上系統全程關閉，只能紙本辦理。</p>
+          <ul class="todo">
+            <li><strong>正確流程</strong>：① 提前 email 教授（<strong>信裡務必寫學號 115300018</strong>）→ ② <strong>去上第一堂課</strong>當面談 → ③ 請教授簽 <strong>Form R-M</strong>（在學生資料包裡）→ ④ 交到<strong>開課的系辦</strong></li>
+            <li><strong>退課</strong>：線上印退選表 → 教授簽 → 交<strong>註冊組</strong>（與加課不同窗口）。<strong>退選表 9/14 前先印好</strong>，這期間系統關閉</li>
+            <li>⚠️ 教授<strong>有權拒絕</strong>，且對<strong>有先修的課可要求你證明學術背景</strong> — 組織行為先修「管理學」，記得帶 MGMT 340 拿 A 的成績單佐證</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="item sev-soon" data-d="2026-10-09">
+        <div class="when"><span class="d">10月–11/10</span><span class="left"></span></div>
+        <div class="stripe"></div>
+        <div class="body">
+          <div class="title">簽證重置：必須出境一次<span class="pill p-critical">硬約束</span></div>
+          <p class="desc"><strong>8/12 入境 + 90 天 ≈ 11/10 到期</strong>。到期前一定要出境再入境，90 天才會重新起算（新的 90 天可蓋到明年 1 月中，穩過 12/24 期末）。去哪裡不限，短程來回即可。</p>
+          <ul class="todo">
+            <li>🇺🇸 <strong>全程只用美國護照</strong>（不回大陸，證件流程單純）</li>
+            <li>🗓️ <strong>10/9–12 是最佳窗口</strong>：10/9 五 台灣國慶補假、10/12 一 你本來沒課 — 一堂課都不用翹</li>
+            <li>🏁 <strong>備選：新加坡 F1</strong>（10/9–11 Marina Bay 夜賽）剛好同一個週末，可順便完成重置。<strong>尚未決定</strong> — GP 週末機票飯店漲 2–3 倍，不去也有很多便宜選擇</li>
+            <li>⏰ 最遲不能拖過 <strong>11/10</strong></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="item sev-info" data-d="2026-11-02">
+        <div class="when"><span class="d">11/02–13</span><span class="left">學期中</span></div>
+        <div class="stripe"></div>
+        <div class="body">
+          <div class="title">第二次人工加退選<span class="pill p-info">補救機會</span></div>
+          <p class="desc"><strong>11/2 09:00 → 11/13 上午 11:59</strong>。學期中還有一次人工加退選窗口，流程與 Phase 4 相同。若 9 月沒搞定的課，這是最後補救點。</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <h2 class="serif">選課清單</h2>
+    <p class="lead">5 門・週一全空・全英語授課。主力全部押在 <b>Phase 2（8/31–9/2）</b>；黃底那門線上選不進，走 Phase 4 人工加簽。</p>
+    <div class="tw">
+      <table>
+        <thead><tr><th>時間</th><th>課程</th><th>對接 UR</th></tr></thead>
+        <tbody>
+          <tr class="flag"><td class="t">三 09:10–12:00</td><td class="c">組織行為（英文班）<span class="pill p-soon">Phase 4 加簽</span></td><td>MGMT 330 · Business Core</td></tr>
+          <tr><td class="t">三 13:10–16:00</td><td class="c">中東歷史</td><td>HIST 902 → 申請 AIHS</td></tr>
+          <tr><td class="t">四 16:10–19:00</td><td class="c">幸福學</td><td>一般選修學分</td></tr>
+          <tr><td class="t">五 13:10–16:00</td><td class="c">種族、宗教、民族主義</td><td>申請 PEIC</td></tr>
+          <tr><td class="t">五 09:10–12:00</td><td class="c">投資與資產組合</td><td>⚠️ 遠距課，UR 不採認線上課</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="lead" style="margin-top:12px">備選：東南亞藝術巡覽（二 16:10）、地圖學（四 09:10・SACE 已預批 GEOG 902）、台灣近代史（四 09:10）。<b>Yulin 提醒</b>：別讓兩門課排在同一時段，Phase 4 處理起來會非常麻煩；也<b>不保證選得上，務必準備備案</b>。</p>
+    <div class="tw" style="margin-top:14px">
+      <table>
+        <thead><tr><th>NCCU 選課規則</th><th>內容</th></tr></thead>
+        <tbody>
+          <tr><td class="c">學分上限</td><td>學士生最多 <strong>25 NCCU 學分</strong>（你 15 學分，安全）</td></tr>
+          <tr><td class="c">學分換算</td><td>1 NCCU 學分 = 16 授課小時 = 2 ECTS</td></tr>
+          <tr><td class="c">跨系選課</td><td>✅ 可以。學士生也可修碩士課，但<strong>需授課教師事前同意</strong></td></tr>
+          <tr><td class="c">交換生禁選</td><td>IMAS、<strong>IMBA</strong>、EMBA、全球銀行與金融學院、<strong>你母語的系所（中文系）</strong></td></tr>
+          <tr><td class="c">課滿了怎麼辦</td><td>可聯繫授課教師，但加不加人<strong>完全由教師決定</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="serif">Bell 的轉學分規則（8/2 來信）</h2>
+    <div class="tw">
+      <table>
+        <thead><tr><th>規則</th><th>對你的影響</th></tr></thead>
+        <tbody>
+          <tr><td class="c">代碼 902/903/904</td><td>轉成 200/300/400 級選修，<strong>可算 concentration</strong>；999 只算一般選修</td></tr>
+          <tr><td class="c">商科課須 ≥0.77 UR units</td><td>才能抵主修/concentration 要求（NCCU 3 學分的換算要在 Gateway「Academics」頁確認）</td></tr>
+          <tr><td class="c">最多 2 門 RSB core</td><td>concentration 選修 1–2 門（Finance 是 1 門）</td></tr>
+          <tr><td class="c">RSB 只批商科／經濟</td><td>非商科（歷史、PEIC）找 <strong>Arts & Sciences 對應系</strong>，用另一份表格</td></tr>
+          <tr><td class="c">IBUS 387 Cultural Awareness</td><td>🆕 <strong>自動註冊</strong>，0.25 unit pass/fail，作業<strong>回美國後</strong>才交，無例外</td></tr>
+          <tr><td class="c">整學期交換</td><td>自動滿足 International Business/Economics 要求（不另給學分）</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="serif">沒有日期，但別忘</h2>
+    <div class="rail">
+      <div class="item sev-soon">
+        <div class="when"><span class="d">出發前</span><span class="left">ASAP</span></div>
+        <div class="stripe"></div>
+        <div class="body">
+          <div class="title">Course Approval Form</div>
+          <p class="desc">抵具體要求的課<strong>必須出發前</strong>送審（Chris 已確認）。純選修不用送。</p>
+          <ul class="todo">
+            <li>✅ <strong>組織行為 → MGMT 330</strong> — Bell 8/5 回信<strong>已批准</strong></li>
+            <li>📤 <strong>商業資料分析與機器學習 → MGMT 225</strong> — 草稿已備好，待附大綱寄出（core 名額只剩這一個）</li>
+            <li>⏳ 中東歷史 → HIST 系審 AIHS；種族宗教 → 審 PEIC</li>
+          </ul>
+        </div>
+      </div>
+      <div class="item sev-info">
+        <div class="when"><span class="d">1 分鐘</span><span class="left">Richmond</span></div>
+        <div class="stripe"></div>
+        <div class="body">
+          <div class="title">Consent / Release for Off-Campus Experiences</div>
+          <p class="desc">Registrar 7/29 來信要求填寫，2026-27 學年必填。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p><strong>學期內假期</strong>：9/25 中秋節 · 9/28 教師節（皆為國定假日）。10/9–10 國慶連假 — 這是<strong>出境重置簽證的黃金窗口</strong>。</p>
+    <p><strong>資料來源</strong>：<strong>OIC 說明會投影片 38 頁（07-30，精確時間出自此）</strong> · OIC 資訊包 1–4（07-27，Yulin Kuo）· 7/28 說明會錄影 95 分鐘全文轉錄 · Fae Bell RSB 選課須知（08-02）· Chris Klein 轉學分回覆（07-24）· UR 健康門戶（08-01）· Registrar（07-29）。</p>
+    <p><strong>聯絡</strong>：Yulin Kuo <code>ykuo088@g.nccu.edu.tw</code> · +886-2-2939-3091 ext 62045 · 行政大樓 8F ｜ Fae Bell <code>fbell@richmond.edu</code> ｜ Nora Kostyk <code>nkostyk@richmond.edu</code> ｜ Chris Klein <code>cklein2@richmond.edu</code></p>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var today = new Date(); today.setHours(0,0,0,0);
+  function daysTo(iso){
+    var d = new Date(iso + "T00:00:00");
+    return Math.round((d - today) / 86400000);
+  }
+  function label(n){
+    if (n > 1)  return n + " 天";
+    if (n === 1) return "明天";
+    if (n === 0) return "就是今天";
+    return "已過";
+  }
+  // timeline rows
+  document.querySelectorAll(".item[data-d]").forEach(function(el){
+    var n = daysTo(el.getAttribute("data-d"));
+    var slot = el.querySelector(".when .left");
+    if (slot) slot.textContent = label(n);
+    if (n < 0) el.classList.add("is-past");
+  });
+  // top stat cards
+  document.querySelectorAll(".stat[data-d]").forEach(function(el){
+    var n = daysTo(el.getAttribute("data-d"));
+    var big = el.querySelector(".big");
+    if (big) big.textContent = label(n);
+    if (n < 0) el.classList.add("is-past");
+  });
+  // header date
+  var t = document.getElementById("today");
+  if (t) t.textContent = (today.getMonth()+1) + "/" + today.getDate();
+})();
+</script>

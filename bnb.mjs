@@ -1,0 +1,17 @@
+import { newTab, closeTab, connect, evalJS, sleep } from './cdp.mjs';
+import { writeFileSync } from 'fs';
+const URL='https://www.airbnb.com/rooms/31689279?adults=2&check_in=2026-08-12&check_out=2026-08-19';
+const tab=await newTab('about:blank');
+const cdp=connect(tab.webSocketDebuggerUrl);await cdp.ready;
+await cdp.send('Page.enable');await cdp.send('Runtime.enable');
+await cdp.send('Network.setUserAgentOverride',{userAgent:'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36'});
+const L=new Promise(r=>{cdp.on(m=>{if(m.method==='Page.loadEventFired')r();});});
+await cdp.send('Page.navigate',{url:URL});
+await Promise.race([L,sleep(20000)]); await sleep(9000);
+const t=await evalJS(cdp,`document.body?document.body.innerText:''`);
+writeFileSync('/home/jimmy/oic/bnb.txt',t||'');
+console.log('页面文字长度:',(t||'').length);
+console.log('标题:',await evalJS(cdp,'document.title'));
+console.log('--- 前 1800 字 ---');
+console.log((t||'').replace(/\n{2,}/g,'\n').slice(0,1800));
+await closeTab(tab.id);cdp.close();process.exit(0);

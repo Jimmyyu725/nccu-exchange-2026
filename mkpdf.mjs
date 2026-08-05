@@ -1,0 +1,12 @@
+import { newTab, closeTab, connect, sleep } from './cdp.mjs';
+import { writeFileSync } from 'fs';
+const tab=await newTab('about:blank');
+const cdp=connect(tab.webSocketDebuggerUrl);await cdp.ready;
+await cdp.send('Page.enable');
+const L=new Promise(r=>{cdp.on(m=>{if(m.method==='Page.loadEventFired')r();});});
+await cdp.send('Page.navigate',{url:'file:///home/jimmy/oic/health/ins.html'});
+await Promise.race([L,sleep(8000)]);await sleep(600);
+const pdf=await cdp.send('Page.printToPDF',{printBackground:true,paperWidth:8.5,paperHeight:11,marginTop:0,marginBottom:0,marginLeft:0,marginRight:0});
+writeFileSync('/home/jimmy/oic/health/Insurance_Statement_Placeholder_YU_JINGTIAN.pdf',Buffer.from(pdf.data,'base64'));
+console.log('PDF 已生成');
+await closeTab(tab.id);cdp.close();process.exit(0);
